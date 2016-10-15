@@ -1,2 +1,2 @@
 # EC504_Awesome_Project
-Repository for EC503 Final Project
+Repository for EC504 Final Project
