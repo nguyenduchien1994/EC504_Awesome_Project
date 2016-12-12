@@ -238,7 +238,8 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Ford Fulkerson implementation begin() " << std::endl;
     std::string baselocation = ("/home/aditya/image_seg_final/");
-    std::string imageFile = baselocation + std::string("pineapple.jpeg");
+    std::string imageFile = baselocation + std::string("traffic.thumbnail");
+    //std::string filename = baselocation + "k-likelihood.py";
     std::string filename = baselocation + "gmm_clustering.py";
     std::string command = "python ";
     command += filename;
@@ -253,6 +254,7 @@ if (!image.data)
     }
     
     // read the kmeans output and store it as a vector
+    //std::string file = baselocation + std::string("k-data.txt");
     std::string file = baselocation + std::string("gmmoutput.txt");
     std::ifstream label(file.c_str());
     //std::vector<string> k_data;
@@ -275,10 +277,13 @@ if (!image.data)
        int n1;
        int n2;
        int n3;
+       //int n4;
        while( is >> n1 and is>> n2 and is>>n3){
 	 k_likelihoodArray[i][0]=n1;
 	 k_likelihoodArray[i][1]=n2;
 	 k_likelihoodArray[i][2]=n3;
+	 //k_likelihoodArray[i][3]=n4;
+	 //std::cout<<n1<<n2<<n3<<n4<<"\n";
 	 i++;
 	}
     }
@@ -294,14 +299,7 @@ if (!image.data)
     std::vector<int> segmatrix(size);
     segmatrix=Ford_Fulkerson(*inputGraph,0,inputGraph->adjacencyList.size()-1,image.cols, image.rows,size);
 
-    //Graph* inputGraph = createGraph(height,width,4,currentsegmentprob);
-    //inputGraph->addEdge(inputGraph->adjacencyList.size(),inputGraph->adjacencyList.size(),0);
-    //std::vector<int> segmatrix(size);
-    //segmatrix=Ford_Fulkerson(*inputGraph,0,inputGraph->adjacencyList.size()-1,height, width,size);
 
-    for (int row=0;row<size;row++){
-      std::cout<<segmatrix.at(row)<<"\n";
- }
     std::cout<<"run till here \n";
     for (column=0; column<size; column++){
 	 if(segmatrix[column]==1)
@@ -340,10 +338,7 @@ for (i=1; i<k-1; i++)
 	  }
 	     
 		//fordfulkerson here again
-		for (row=0;row<size;row++){
-		  std::cout<<currentsegmentprob.at(row)<<"\n";
-		}
-				std::cout<<"temp start\n";
+
 
 				//Graph* inputGraph = createGraph(height,width,4,currentsegmentprob);
     
@@ -364,24 +359,21 @@ for (i=1; i<k-1; i++)
 					k_likelihoodArray[row][i]=0;
 				}
 				}
-		for (row=0;row<size;row++){
-      std::cout<<segmatrix.at(row)<<"\n";
-		}				
+						
 	}
  for (row=0;row<size;row++){
    if (segmatrix.at(row)==-1)
      segmatrix.at(row)=k;
  }
- std::cout<<"here I am \n";
 
  row=0;
-   cv::Mat binaryImage = cv::Mat(width,height,CV_8UC1);
+   cv::Mat binaryImage = cv::Mat(height,width,CV_8UC1);
    //binaryimage.at<uchar>(rowVal,colVal) = 255/3;
 
-   for(j=0;j<height;j++){
-      for (i=0;i<width;i++){
+   for(i=0;i<height;i++){
+      for (j=0;j<width;j++){
      binaryImage.at<uchar>(i,j) = (255*segmatrix.at(row))/k;
-     std::cout<<(255*segmatrix.at(row))/k<<"\n";
+     //std::cout<<(255*segmatrix.at(row))/k<<"\n";
      row++;
    }
    }

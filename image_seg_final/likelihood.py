@@ -22,10 +22,6 @@ def getLikelihood(imageFile):
 	    if likelihood > 0.5:
 		segmentedimage[i][j]=1;
             likelihoodList.append(int(round(likelihood*10)))
-    #print likelihoodList[-20:-1]
-    #print labels[-20:-1]
-#    cv2.imshow("segmentedimage",segmentedimage)
-#    cv2.waitKey(0)
     return likelihoodList,len(likelihoodList)
 
 def getData(imageFile):
@@ -36,7 +32,6 @@ def getData(imageFile):
 	f.close()
 	print dataSize
 
-#def main():
-getData("cat.thumbnail")
+#getData("pineapple.thumbnail")
 
 

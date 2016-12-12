@@ -29,14 +29,13 @@ def getLikelihood(imageFile,k):
     return likelihoodList,len(likelihoodList)
 
 def getData(imageFile,k):
-	f = open('k-data.txt', 'w')	
+	f = open('output.txt', 'w')	
 	dataList,dataSize = getLikelihood(imageFile,k)
 	for data in range(0,dataSize):
 		f.write(str(dataList[data])+"\n")
 	f.close()
 	print dataSize
 
-#def main():
-getData("Lenna.thumbnail",3)
+#getData("rgb.thumbnail",2)
 
 

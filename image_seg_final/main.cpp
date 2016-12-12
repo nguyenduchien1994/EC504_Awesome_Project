@@ -361,9 +361,9 @@ int main(int argc, const char * argv[]) {
     // insert code here...
     std::cout << "Ford Fulkerson implementatio begin() " << std::endl;
     std::string baselocation = ("/home/aditya/image_seg_final/");
-    std::string imageFile = baselocation + std::string("plane.jpg");
-    //std::string filename = baselocation + "likelihood.py";
-    std::string filename = baselocation + "gmm_clustering.py";
+    std::string imageFile = baselocation + std::string("pineapple.thumbnail");
+    std::string filename = baselocation + "likelihood.py";
+    //std::string filename = baselocation + "gmm_clustering.py";
       std::string command = "python ";
     command += filename;
     system(command.c_str());
@@ -376,7 +376,8 @@ int main(int argc, const char * argv[]) {
     }
     
     // read the kmeans output and store it as a vector
-    std::string file = baselocation + std::string("gmmoutput.txt");
+    //std::string file = baselocation + std::string("gmmoutput.txt");
+    std::string file = baselocation + std::string("data.txt");
     std::ifstream label(file.c_str());
     std::vector<int> likelihoodArray;
     if ( label.is_open() )
@@ -393,7 +394,7 @@ int main(int argc, const char * argv[]) {
     }
     
     std::cout << "The size of likelihood array is " << likelihoodArray.size() << std::endl;
-    Graph* inputGraph = createGraph(image.cols,image.rows,4,likelihoodArray);
+    Graph* inputGraph = createAdiGraph(image.cols,image.rows,4,likelihoodArray);
     inputGraph->addEdge(inputGraph->adjacencyList.size(),inputGraph->adjacencyList.size(),0);
     std::cout << "The size of the graph is " << inputGraph->adjacencyList.size() << std::endl;
     cv::Mat binaryImage= cv::Mat(image.cols,image.rows,CV_8UC1);

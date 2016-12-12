@@ -1,7 +1,7 @@
 import os, sys
 import Image
 
-size = 150, 150
+size = 100, 100
 
 for infile in sys.argv[1:]:
     outfile = os.path.splitext(infile)[0] + ".thumbnail"

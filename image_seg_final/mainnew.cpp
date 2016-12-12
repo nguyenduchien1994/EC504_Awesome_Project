@@ -23,8 +23,8 @@ int V = 202;
 
 class Graph {
 public:
-  //std::map<int,std::map<int,int> > adjacencyList;
-   std::unordered_map<int,std::unordered_map<int,int> > adjacencyList;
+    //std::map<int,std::map<int,int> > adjacencyList;
+    std::unordered_map<int,std::unordered_map<int,int> > adjacencyList;
     void addEdge(int source, int dest, int weight )
     {
         if ( adjacencyList.find(source) == adjacencyList.end() )
@@ -39,17 +39,17 @@ public:
             adjacencyList[source].insert(std::pair<int,int>(dest,weight));
         }
     }
-
-  void numberOfEdges()
+    
+    void numberOfEdges()
     {
         int size = 0;
         for ( auto& pair:adjacencyList )
         {
             size += pair.second.size();
         }
-	std::cout<<"number of edges are "<<size<<"\n";
+        std::cout<<"number of edges are "<<size<<"\n";
     }
-
+    
     //void displa
     // We might need some functions but it's better we directly access from adjacencyList rather through function call;
 };
@@ -138,17 +138,17 @@ cv::Mat Ford_Fulkerson (Graph& graph, int source, int sink, int width, int heigh
     }
     
     //breadthFirstSearch(graph, source, sink, parent,reached, true);
-   
+    
     /*for (int i = 0; i < prevGraph->adjacencyList.size(); i++)
-    {
-        for (int j = 0; j < prevGraph->adjacencyList.size(); j++)
-        {
-            if (reached[i] && !reached[j] && prevGraph->adjacencyList[i][j])
-            {
-                std::cout << i << " - " << j << std::endl;
-            }
-        }
-	}*/
+     {
+     for (int j = 0; j < prevGraph->adjacencyList.size(); j++)
+     {
+     if (reached[i] && !reached[j] && prevGraph->adjacencyList[i][j])
+     {
+     std::cout << i << " - " << j << std::endl;
+     }
+     }
+     }*/
     
     int foregroundCount = 0;
     int backgroundCount = 0;
@@ -170,10 +170,10 @@ cv::Mat Ford_Fulkerson (Graph& graph, int source, int sink, int width, int heigh
     }
     std::cout << "foreground count is " << foregroundCount << std::endl;
     std::cout << "background count is " << backgroundCount << std::endl;
-
+    
     //cv::imshow("Segmented Image",binaryImage);
     //cv::waitKey(0);
-        
+    
     
     //return maxFlow;
     return binaryImage;
@@ -213,24 +213,24 @@ Graph* createAdiGraph ( int width, int height, int penalty, std::vector<int>& li
             
             if(weight1>threshold)
                 g->addEdge(i,i+1,penalty);
-	    //else
-	    //   g->addEdge(i,i+1,2);
-
+            //else
+            //   g->addEdge(i,i+1,2);
+            
             if(weight2>threshold)
                 g->addEdge(i,i-1,penalty);
-	    //else
-	    //    g->addEdge(i,i-1,2);
-	    
+            //else
+            //    g->addEdge(i,i-1,2);
+            
             if(weight3>threshold)
                 g->addEdge(i,i+width,penalty);
-	    //else
-	    //    g->addEdge(i,i+width,2);
-	    
+            //else
+            //    g->addEdge(i,i+width,2);
+            
             if(weight4>threshold)
                 g->addEdge(i,i-width,penalty);
-	    //else
-	    //    g->addEdge(i,i-width,2);
-		}
+            //else
+            //    g->addEdge(i,i-width,2);
+        }
         ////////////////////////////////////////////////////////////////////
         // first row
         /*if ( rownum == 1 )
@@ -279,9 +279,9 @@ Graph* createAdiGraph ( int width, int height, int penalty, std::vector<int>& li
          g->addEdge(i,i-1,penalty);
          g->addEdge(i,i+1,penalty);
          }*/
-	 }
+    }
     
-        g->numberOfEdges();
+    g->numberOfEdges();
     return g;
 }
 
@@ -358,15 +358,45 @@ Graph* createGraph ( int width, int height, int penalty, std::vector<int>& likel
 
 int main(int argc, const char * argv[]) {
     
-    // insert code here...
-    std::cout << "Ford Fulkerson implementatio begin() " << std::endl;
-    std::string baselocation = ("/home/aditya/image_seg_final/");
-    std::string imageFile = baselocation + std::string("plane.thumbnail");
+    std::string imagename;
+    int gmmornot = 0;  // default is gmm
+    int numberofClusters = 2; // default is 2 cluster
+    std::string filename(" ");
+    std::cout << "Ford Fulkerson implementation begin() " << std::endl;
+    if (argc < 2)
+    {
+        std::cout << "Invalid number of arguments" << std::endl;
+        std::cout << "Please provide image name and an integer (0 or 1! 0 for GMM, 1 for K-Means ) and number of segments " << std::endl;
+        return 0;
+    }
+    if (argc == 2)
+    {
+        imagename = std::string(argv[1]);
+    }
+    else if(argc == 3)
+    {
+        imagename = std::string(argv[1]);
+        gmmornot = std::atoi(argv[2]);
+    }
+    else if (argc == 4)
+    {
+        imagename = std::string(argv[1]);
+        gmmornot = std::atoi(argv[2]);
+        numberofClusters = std::atoi(argv[3]);
+    }
+    std::string baselocation = ("./");
+    std::string imageFile = baselocation + std::string("image/") + std::string(imagename);
     //std::string filename = baselocation + "likelihood.py";
-    std::string filename = baselocation + "gmm_clustering.py";
-      std::string command = "python ";
+    if (gmmornot == 0 )
+        filename = baselocation + "gmm_clustering.py ";
+    else
+        filename = baselocation + "k-likelihood.py ";
+    std::string command = "python ";
     command += filename;
+    command += imageFile + std::string(" ") + std::to_string(numberofClusters);
     system(command.c_str());
+    std::cout << "The command used to call the python file is " << command << std::endl;
+
     cv::Mat image;
     image = cv::imread(imageFile);
     
@@ -376,7 +406,7 @@ int main(int argc, const char * argv[]) {
     }
     
     // read the kmeans output and store it as a vector
-    std::string file = baselocation + std::string("gmmoutput.txt");
+    std::string file = baselocation + std::string("output.txt");
     std::ifstream label(file.c_str());
     std::vector<int> likelihoodArray;
     if ( label.is_open() )
@@ -393,7 +423,7 @@ int main(int argc, const char * argv[]) {
     }
     
     std::cout << "The size of likelihood array is " << likelihoodArray.size() << std::endl;
-    Graph* inputGraph = createAdiGraph(image.cols,image.rows,4,likelihoodArray);
+    Graph* inputGraph = createGraph(image.cols,image.rows,4,likelihoodArray);
     inputGraph->addEdge(inputGraph->adjacencyList.size(),inputGraph->adjacencyList.size(),0);
     std::cout << "The size of the graph is " << inputGraph->adjacencyList.size() << std::endl;
     cv::Mat binaryImage= cv::Mat(image.cols,image.rows,CV_8UC1);
@@ -404,9 +434,10 @@ int main(int argc, const char * argv[]) {
     auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - start);
     std::cout<<elapsed.count();
     std::cout<<"\n";
-
-     cv::imshow("Segmented Image",binaryImage);
+    
+    cv::imshow("Segmented Image",binaryImage);
     cv::waitKey(0);
     return 0;
     
 }
+

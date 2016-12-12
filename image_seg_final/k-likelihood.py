@@ -1,6 +1,7 @@
 from __future__ import division
 import numpy as np
 import cv2
+import sys
 from sklearn.cluster import KMeans
 from scipy.spatial import distance
 
@@ -29,14 +30,16 @@ def getLikelihood(imageFile,k):
     return likelihoodList,len(likelihoodList)
 
 def getData(imageFile,k):
-	f = open('k-data.txt', 'w')	
+	f = open('output.txt', 'w')	
 	dataList,dataSize = getLikelihood(imageFile,k)
 	for data in range(0,dataSize):
 		f.write(str(dataList[data])+"\n")
 	f.close()
 	print dataSize
 
-#def main():
-getData("obama.thumbnail",3)
+args = sys.argv
+getData(args[1],int(args[2]))
+        
+#getData("rgb.thumbnail",2)
 
 

@@ -37,6 +37,6 @@ def getData(imageFile):
 	print dataSize
 
 #def main():
-getData("plane.thumbnail")
+getData("cat.thumbnail")
 
 
