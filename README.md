@@ -27,6 +27,7 @@ To Run 2 segmenation, you can use 500*500 which works within 3*4 minutes. Images
 
 The downsample tool is avaialble to downsample the images
 python downsample.py <imagename> <width> <height>
+
 <imagename> Just provide the imagename. No path. All images should be in the image folder
 <width> integer value width of the image
 <height> integer value of height of the image.
@@ -35,6 +36,7 @@ python downsample.py <imagename> <width> <height>
 Please provide the <imagename> directly. Please don't provide the path. The images should be added into the image folder. The program automatically looks for images in the image folder.
 
 ./imagesegmentation <imagename> <clustering>
+
  <imagename> - name of the imagefile
  <clustering> - an integer value 0 or 1, if you want to use gmm or k-means. It uses gmm by default.
  
@@ -47,6 +49,7 @@ Please provide the <imagename> directly. Please don't provide the path. The imag
 # RUN K-Segmentation
  
  ./kimagesegmentation <imagename> <clustering> <numberOfSegments>
+ 
  <imagename> - name of the imagefile
  <clustering> - an integer value 0 or 1, if you want to use gmm or k-means
  <numberOfSegments> - The total number of segments you want the image to be divided into.
