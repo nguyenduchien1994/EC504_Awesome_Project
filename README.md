@@ -36,7 +36,7 @@ Please provide the <imagename> directly. Please don't provide the path. The imag
  
  Please look into the pkg-config expansion above.
  
- #RUN K-Segmentation
+ # RUN K-Segmentation
  
  ./imagesegmentation <imagename> <clustering> <numberOfSegments>
  <imagename> - name of the imagefile
