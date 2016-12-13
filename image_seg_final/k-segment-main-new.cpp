@@ -30,17 +30,17 @@ public:
             adjacencyList[source].insert(std::pair<int,int>(dest,weight));
         }
     }
-
-  void numberOfEdges()
+    
+    void numberOfEdges()
     {
         int size = 0;
         for ( auto& pair:adjacencyList )
         {
             size += pair.second.size();
         }
-	std::cout<<"number of edges are "<<size<<"\n";
+        std::cout<<"number of edges are "<<size<<"\n";
     }
-
+    
     //void displa
     // We might need some functions but it's better we directly access from adjacencyList rather through function call;
 };
@@ -120,21 +120,21 @@ std::vector<int> Ford_Fulkerson (Graph& graph, int source, int sink, int width, 
     }
     
     //breadthFirstSearch(graph, source, sink, parent,reached, true);
-   
+    
     /*for (int i = 0; i < prevGraph->adjacencyList.size(); i++)
-    {
-        for (int j = 0; j < prevGraph->adjacencyList.size(); j++)
-        {
-            if (reached[i] && !reached[j] && prevGraph->adjacencyList[i][j])
-            {
-                std::cout << i << " - " << j << std::endl;
-            }
-        }
-	}*/
+     {
+     for (int j = 0; j < prevGraph->adjacencyList.size(); j++)
+     {
+     if (reached[i] && !reached[j] && prevGraph->adjacencyList[i][j])
+     {
+     std::cout << i << " - " << j << std::endl;
+     }
+     }
+     }*/
     
     int foregroundCount = 0;
     int backgroundCount = 0;
-   
+    
     std::vector<int> segmentArray(size);
     for (int i=0; i< prevGraph->adjacencyList.size()-1; ++i)
     {
@@ -142,21 +142,21 @@ std::vector<int> Ford_Fulkerson (Graph& graph, int source, int sink, int width, 
         int colVal  = i%width;
         if ( reached[i+1] )
         {
-	  //binaryImage.at<uchar>(rowVal,colVal) = 0;
-	  //foregroundCount++;
-	    segmentArray[i]=1;
+            //binaryImage.at<uchar>(rowVal,colVal) = 0;
+            //foregroundCount++;
+            segmentArray[i]=1;
         }
         else
         {
-	  // backgroundCount++;
-	    segmentArray[i]=-1;
+            // backgroundCount++;
+            segmentArray[i]=-1;
         }
     }
     //std::cout << "foreground count is " << foregroundCount << std::endl;
     //std::cout << "background count is " << backgroundCount << std::endl;
-
+    
     //
-        
+    
     return segmentArray;
     //return maxFlow;
 }
@@ -272,7 +272,7 @@ int main(int argc, const char * argv[]) {
     command += filename;
     command += imageFile + std::string(" ") + std::to_string(numberofClusters);
     system(command.c_str());
-
+    
     std::cout << "The command used to call the python file is " << command << std::endl;
     
     cv::Mat image;
@@ -294,11 +294,11 @@ int main(int argc, const char * argv[]) {
     int width=image.size().width;
     int height=image.size().height;
     //int width=3;
-	//int height=3;
+    //int height=3;
     //int size=9;
     int k=numberofClusters;
     std::vector<std::vector<int> > k_likelihoodArray;
-
+    
     //std::ifstream file("k-data.txt");
     std::string input;
     int i=0;
@@ -320,7 +320,7 @@ int main(int argc, const char * argv[]) {
             k_likelihoodArray.push_back(line);
         }
     }
-
+    
     std::cout << "The likeilihood vector values are" << std::endl;
     for (auto& vec:k_likelihoodArray)
     {
@@ -330,102 +330,105 @@ int main(int argc, const char * argv[]) {
         }
         std::cout << std::endl;
     }
-
+    
     int column;
     std::vector<int> currentsegmentprob(size);
     for (column=0; column<size; column++)
     {
         currentsegmentprob.at(column)=k_likelihoodArray[column][0];
     }
-
-
+    
+    
     Graph* inputGraph = createGraph(image.cols,image.rows,4,currentsegmentprob);
     inputGraph->addEdge(inputGraph->adjacencyList.size(),inputGraph->adjacencyList.size(),0);
     std::vector<int> segmatrix(size);
     segmatrix=Ford_Fulkerson(*inputGraph,0,inputGraph->adjacencyList.size()-1,image.cols, image.rows,size);
-
-
+    
+    
     std::cout<<"run till here \n";
     for (column=0; column<size; column++){
-	 if(segmatrix[column]==1)
-		{
-		  k_likelihoodArray[column][0]=10;
-		  for(i=1; i<k; i++)
-			k_likelihoodArray[column][i]=0;
-		}
-			else
-			{
-			       k_likelihoodArray[column][0]=0;
-			}
-		}
+        if(segmatrix[column]==1)
+        {
+            k_likelihoodArray[column][0]=10;
+            for(i=1; i<k; i++)
+                k_likelihoodArray[column][i]=0;
+        }
+        else
+        {
+            k_likelihoodArray[column][0]=0;
+        }
+    }
     //int j;
     int j,row;
-
-for (i=1; i<k-1; i++)
-	{
-	  std::cout<<"no\n";
-	//normalization
-	  std::vector<int> sum(size,0);
-	  for (row=0; row<size; row++)
-		 for (j=i; j<k; j++)
-			sum[row]=sum[row]+k_likelihoodArray[row][j];
-
-	  
-	  for (row=0; row<size; row++){
-	    for (j=i; j<k; j++){
-	      if (k_likelihoodArray[row][j]!=0){
-		 k_likelihoodArray[row][i]=(10*k_likelihoodArray[row][i])/sum[row];
-	      }		     
-	    }
-	  }
-	  for (row=0; row<size; row++){
-	    currentsegmentprob.at(row)=k_likelihoodArray[row][i];
-	  }
-	     
-		//fordfulkerson here again
-
-
-				//Graph* inputGraph = createGraph(height,width,4,currentsegmentprob);
     
-    inputGraph = createGraph(image.cols,image.rows,4,currentsegmentprob);
-    inputGraph->addEdge(inputGraph->adjacencyList.size(),inputGraph->adjacencyList.size(),0);
-    std::vector<int> temp=Ford_Fulkerson(*inputGraph,0,inputGraph->adjacencyList.size()-1,image.cols, image.rows,size);
-		for (row=0; row<size; row++){	
-			//deletion of nodes from prob matrix (assigning zero prob to all other values)
-		  if(temp.at(row)==1)
-				{	
-					k_likelihoodArray[row][i]=10;
-					segmatrix.at(row)=i+1;
-					for(j=i+1; j<k; j++)
-						k_likelihoodArray[row][j]=0;
-				}
-				else
-				{
-					k_likelihoodArray[row][i]=0;
-				}
-				}
-						
-	}
- for (row=0;row<size;row++){
-   if (segmatrix.at(row)==-1)
-     segmatrix.at(row)=k;
- }
-
- row=0;
-   cv::Mat binaryImage = cv::Mat(height,width,CV_8UC1);
-   //binaryimage.at<uchar>(rowVal,colVal) = 255/3;
-
-   for(i=0;i<height;i++){
-      for (j=0;j<width;j++){
-     binaryImage.at<uchar>(i,j) = (255*segmatrix.at(row))/k;
-     //std::cout<<(255*segmatrix.at(row))/k<<"\n";
-     row++;
-   }
-   }
-
- cv::imshow("Segmented Image",binaryImage);
- cv::waitKey(0);
-return 0;
+    for (i=1; i<k-1; i++)
+    {
+        std::cout<<"no\n";
+        //normalization
+        std::vector<int> sum(size,0);
+        for (row=0; row<size; row++)
+            for (j=i; j<k; j++)
+                sum[row]=sum[row]+k_likelihoodArray[row][j];
+        
+        
+        for (row=0; row<size; row++){
+            for (j=i; j<k; j++){
+                if (k_likelihoodArray[row][j]!=0){
+                    k_likelihoodArray[row][i]=(10*k_likelihoodArray[row][i])/sum[row];
+                }
+            }
+        }
+        for (row=0; row<size; row++){
+            currentsegmentprob.at(row)=k_likelihoodArray[row][i];
+        }
+        
+        //fordfulkerson here again
+        
+        
+        //Graph* inputGraph = createGraph(height,width,4,currentsegmentprob);
+        
+        inputGraph = createGraph(image.cols,image.rows,4,currentsegmentprob);
+        inputGraph->addEdge(inputGraph->adjacencyList.size(),inputGraph->adjacencyList.size(),0);
+        std::vector<int> temp=Ford_Fulkerson(*inputGraph,0,inputGraph->adjacencyList.size()-1,image.cols, image.rows,size);
+        for (row=0; row<size; row++)
+        {
+            //deletion of nodes from prob matrix (assigning zero prob to all other values)
+            if(temp.at(row)==1)
+            {
+                k_likelihoodArray[row][i]=10;
+                segmatrix.at(row)=i+1;
+                for(j=i+1; j<k; j++)
+                    k_likelihoodArray[row][j]=0;
+            }
+            else
+            {
+                k_likelihoodArray[row][i]=0;
+            }
+        }
+        
+    }
+    
+    for (row=0;row<size;row++)
+    {
+        if (segmatrix.at(row)==-1)
+            segmatrix.at(row)=k;
+    }
+    
+    row=0;
+    cv::Mat binaryImage = cv::Mat(height,width,CV_8UC1);
+    //binaryimage.at<uchar>(rowVal,colVal) = 255/3;
+    
+    for(i=0;i<height;i++){
+        for (j=0;j<width;j++){
+            binaryImage.at<uchar>(i,j) = (255*segmatrix.at(row))/k;
+            //std::cout<<(255*segmatrix.at(row))/k<<"\n";
+            row++;
+        }
+    }
+    
+    cv::imshow("Segmented Image",binaryImage);
+    cv::waitKey(0);
+    return 0;
     
 }
 
