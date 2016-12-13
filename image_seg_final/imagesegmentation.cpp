@@ -19,8 +19,8 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <chrono>
 
-int V = 202;
 
+// our graph class
 class Graph {
 public:
     //std::map<int,std::map<int,int> > adjacencyList;
@@ -49,18 +49,12 @@ public:
         }
         std::cout<<"number of edges are "<<size<<"\n";
     }
-    
-    //void displa
-    // We might need some functions but it's better we directly access from adjacencyList rather through function call;
 };
 
 
 int breadthFirstSearch(Graph& residualGraph, int source, int sink, std::vector<int>& parent, std::vector<bool>& reached, bool print)
 {
-    // We add one because our graph contains only adjacencyList;
-    // May be we will change this in the future
     size_t V = residualGraph.adjacencyList.size();
-    //std::vector<bool> reached(residualGraph.adjacencyList.size(),false);
     std::queue <int> queue;
     queue.push(source);
     reached[source] = true;
@@ -71,8 +65,7 @@ int breadthFirstSearch(Graph& residualGraph, int source, int sink, std::vector<i
         int u = queue.front();
         queue.pop();
         std::unordered_map<int, int>& neighbors = residualGraph.adjacencyList[u];
-        //for (int v=0; v<V; v++)
-        //{
+
         for(auto& edgeWeightPair:neighbors )
         {
             if (reached[edgeWeightPair.first]==false && edgeWeightPair.second > 0)
@@ -90,16 +83,6 @@ int breadthFirstSearch(Graph& residualGraph, int source, int sink, std::vector<i
         return true;
     }
     return false;
-}
-
-
-void depthFirstSearch(Graph& residualGraph, std::vector<bool>& reached, int source )
-{
-    //std::cout << "Setting " << source << "as true" << std::endl;
-    reached[source] = true;
-    for (int i = 0; i < V; ++i )
-        if (residualGraph.adjacencyList[source][i] && !reached[i])
-            depthFirstSearch(residualGraph,reached,i);
 }
 
 
@@ -137,18 +120,6 @@ cv::Mat Ford_Fulkerson (Graph& graph, int source, int sink, int width, int heigh
         std::fill(reached.begin(),reached.end(),false);
     }
     
-    //breadthFirstSearch(graph, source, sink, parent,reached, true);
-    
-    /*for (int i = 0; i < prevGraph->adjacencyList.size(); i++)
-     {
-     for (int j = 0; j < prevGraph->adjacencyList.size(); j++)
-     {
-     if (reached[i] && !reached[j] && prevGraph->adjacencyList[i][j])
-     {
-     std::cout << i << " - " << j << std::endl;
-     }
-     }
-     }*/
     
     int foregroundCount = 0;
     int backgroundCount = 0;
@@ -168,14 +139,7 @@ cv::Mat Ford_Fulkerson (Graph& graph, int source, int sink, int width, int heigh
             backgroundCount++;
         }
     }
-    std::cout << "foreground count is " << foregroundCount << std::endl;
-    std::cout << "background count is " << backgroundCount << std::endl;
-    
-    //cv::imshow("Segmented Image",binaryImage);
-    //cv::waitKey(0);
-    
-    
-    //return maxFlow;
+   
     return binaryImage;
 }
 
@@ -231,54 +195,6 @@ Graph* createAdiGraph ( int width, int height, int penalty, std::vector<int>& li
             //else
             //    g->addEdge(i,i-width,2);
         }
-        ////////////////////////////////////////////////////////////////////
-        // first row
-        /*if ( rownum == 1 )
-         {
-         // horizontal next pixel
-         if ( i != width )
-         g->addEdge(i,i+1,penalty);
-         
-         // horizontal previous pixel
-         if ( colnum != width )
-         g->addEdge(i,i-1,penalty);
-         
-         // vertical below pixel
-         g->addEdge(i,i+width,penalty);
-         
-         }
-         else if ( colnum == 1 )  // first column
-         {
-         // we don't have to worry about the edge condition for pixel 1 since it will go to previous if loop;
-         g->addEdge(i,i+1,penalty);
-         g->addEdge(i,i-width,penalty);
-         
-         if ( rownum != height)             //last row;
-         g->addEdge(i,i+width,penalty);
-         
-         }
-         else if ( rownum == height )
-         {
-         if ( colnum != width )
-         g->addEdge(i,i+1,penalty);
-         
-         g->addEdge(i,i-width,penalty);
-         // no check required here since colnum 1 will go to previous loop
-         g->addEdge(i,i-1, penalty);
-         }
-         else if ( colnum == width )
-         {
-         g->addEdge(i,i+width,penalty);
-         g->addEdge(i,i-width,penalty);
-         g->addEdge(i,i-1,penalty);
-         }
-         else
-         {
-         g->addEdge(i,i+width,penalty);
-         g->addEdge(i,i-width,penalty);
-         g->addEdge(i,i-1,penalty);
-         g->addEdge(i,i+1,penalty);
-         }*/
     }
     
     g->numberOfEdges();
