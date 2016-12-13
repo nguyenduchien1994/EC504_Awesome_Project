@@ -30,13 +30,13 @@ Please provide the <imagename> directly. Please don't provide the path. The imag
  <imagename> - name of the imagefile
  <clustering> - an integer value 0 or 1, if you want to use gmm or k-means. It uses gmm by default.
  
- #K Segmenation :
+# K Segmenation :
  
  g++ -std=c++11 kimagesegmentation.cpp -o imagesegmenation `pkg-config --cflags --libs opencv`
  
  Please look into the pkg-config expansion above.
  
- # RUN K-Segmentation
+# RUN K-Segmentation
  
  ./imagesegmentation <imagename> <clustering> <numberOfSegments>
  <imagename> - name of the imagefile
