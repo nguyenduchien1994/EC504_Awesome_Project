@@ -17,7 +17,7 @@ If you have pkg-config for opencv, the following command should compile the file
 # 2 Segmentation:
 
 #Compilation:
-g++ -std=c++11 imagesegmentation.cpp -o imagesegmenation `pkg-config --cflags --libs opencv`
+g++ -std=c++11 imagesegmentation.cpp -o imagesegmentation `pkg-config --cflags --libs opencv`
 
 PS: If you don't have pkg-config you can expand the command `pkg-config --cflags --libs opencv`
 In MAC OSX the command expands as following. Might have to change your path depending on your installation!
@@ -43,7 +43,7 @@ Please provide the <imagename> directly. Please don't provide the path. The imag
  
 # K Segmenation :
  
- g++ -std=c++11 kimagesegmentation.cpp -o kimagesegmenation `pkg-config --cflags --libs opencv`
+ g++ -std=c++11 kimagesegmentation.cpp -o kimagesegmentation `pkg-config --cflags --libs opencv`
  
  Please look into the pkg-config expansion above.
  
